@@ -5,3 +5,8 @@ sentence-transformers>=3.0.0
 groq>=0.9.0
 pydantic>=2.7.0
 python-dotenv>=1.0.1
+
+# Streamlit deploy fix: Chroma → OpenTelemetry proto is incompatible with newer protobuf.
+# Keep protobuf on the last broadly compatible 3.20.x line to avoid:
+# "TypeError: Descriptors cannot be created directly."
+protobuf>=3.20.3,<4

@@ -50,4 +50,5 @@ streamlit run app.py
 - Do **not** commit your Groq key. Set it as a secret on your hosting platform.
   - **Streamlit Community Cloud**: set `GROQ_API_KEY` in the app secrets.
   - Other hosts: set an environment variable named `GROQ_API_KEY`.
+- If Streamlit deploy logs show an unexpected Python version (e.g. `python3.14`) and Chroma fails to import with a protobuf error, keep the repo’s `runtime.txt` (set to Python 3.12) so dependency pins remain compatible.
 
