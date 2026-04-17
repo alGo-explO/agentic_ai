@@ -1,0 +1,12 @@
+.venv/
+.chroma/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Local env files
+.env
+.env.*
