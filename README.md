@@ -1,5 +1,7 @@
 # Project 12 — Milestone 2 (Agentic AI Assessment Design Assistant)
 
+🚀 **Live app**: [https://algo-explo-agentic-ai-app-gw76vv.streamlit.app/](https://algo-explo-agentic-ai-app-gw76vv.streamlit.app/)
+
 This repository implements **Milestone 2 only** from `Project 12_AI_ML.pdf`:
 an **agentic assessment design assistant** that:
 - accepts assessment design queries,
