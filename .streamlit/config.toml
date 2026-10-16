@@ -1,0 +1,7 @@
+[server]
+# Streamlit Community Cloud sets its own port; this is for local dev.
+headless = true
+enableCORS = false
+
+[browser]
+gatherUsageStats = false

@@ -28,14 +28,10 @@ DEFAULT_EMBED_MODEL = "all-MiniLM-L6-v2"
 # Groq model IDs change over time; keep this list to "Production Models" from Groq docs.
 # Source: https://console.groq.com/docs/models
 GROQ_PRODUCTION_MODELS = [
-    "llama-3.3-70b-versatile",
-    "llama-3.1-8b-instant",
-    "groq/compound",
-    "groq/compound-mini",
     "openai/gpt-oss-120b",
     "openai/gpt-oss-20b",
 ]
-GROQ_FALLBACK_MODEL = "llama-3.3-70b-versatile"
+GROQ_FALLBACK_MODEL = "openai/gpt-oss-120b"
 
 
 class HashEmbeddingFunction:
@@ -394,10 +390,29 @@ def _retrieve(collection: Any, query: str, k: int = 6) -> List[Dict[str, Any]]:
     return out
 
 
+def _get_groq_api_key() -> str:
+    """
+    Resolve the Groq API key from (in order):
+    1. Streamlit secrets (st.secrets) — used on Streamlit Community Cloud.
+    2. Environment variable GROQ_API_KEY — used locally / other hosts.
+    """
+    try:
+        key = st.secrets.get("GROQ_API_KEY", "")
+        if key:
+            return key.strip()
+    except Exception:
+        pass
+    return os.getenv("GROQ_API_KEY", "").strip()
+
+
 def _groq_client() -> Groq:
-    api_key = os.getenv("GROQ_API_KEY", "").strip()
+    api_key = _get_groq_api_key()
     if not api_key:
-        raise RuntimeError("Missing GROQ_API_KEY. Set it in Streamlit Secrets or environment.")
+        raise RuntimeError(
+            "Missing GROQ_API_KEY. "
+            "On Streamlit Community Cloud: add it under App settings → Secrets. "
+            "Locally: set it in your .env file or shell environment."
+        )
     return Groq(api_key=api_key)
 
 
@@ -693,6 +708,12 @@ def main():
 
     with tab_rag:
         st.write(f"**Chroma storage**: `{PERSIST_DIR}`")
+        st.info(
+            "⚠️ **Streamlit Community Cloud**: the filesystem is ephemeral. "
+            "The seed corpus is re-loaded automatically on every cold start, but any text "
+            "you add via 'Add extra guidelines' will be lost when the app restarts. "
+            "For persistent uploads, consider an external vector store."
+        )
         c1, c2 = st.columns([0.45, 0.55], gap="large")
         with c1:
             if st.button("Initialize / seed guidelines corpus", use_container_width=True):
